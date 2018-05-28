@@ -10,9 +10,9 @@ things were designed in a particular way that it's not that common for
 Rails-ready API. Those kinks have been addressed (in a way), and so far,
 there's direct support for:
 
-`Group` via `FifteenFive::Group`
-`Report` via `FifteenFive::Report`
-`User` via `FifteenFive::User`
+- `Group` via `FifteenFive::Group`
+- `Report` via `FifteenFive::Report`
+- `User` via `FifteenFive::User`
 
 Since they were built on top of the [Her gem](https://github.com/remiprev/her),
 a lot of ActiveResource-like functionality is freely available:
