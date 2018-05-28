@@ -17,13 +17,13 @@ there's direct support for:
 Since they were built on top of the [Her gem](https://github.com/remiprev/her),
 a lot of ActiveResource-like functionality is freely available:
 
-    ```ruby
-    FifteenFive::Models::User.all.to_a
-    # => [#<FifteenFive::Models::User(user/954612/) ...>, ...]
+```ruby
+FifteenFive::Models::User.all.to_a
+# => [#<FifteenFive::Models::User(user/954612/) ...>, ...]
 
-    FifteenFive::Models::User.find(954612)
-    # => #<FifteenFive::Models::User(user/954612/) ...>
-    ```
+FifteenFive::Models::User.find(954612)
+# => #<FifteenFive::Models::User(user/954612/) ...>
+```
 
 No work has been done (yet) to handle associations due to how they relate
 information (through URLs).
