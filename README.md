@@ -1,29 +1,38 @@
 # FifteenFive
 
-A simple, work-in-progress interface for the [15Five](https://my.15five.com/api/public/)
-API.
+A simple, work-in-progress interface for the [15Five API](https://my.15five.com/api/public/).
 
 ## Overview
 
-The [15Five](https://my.15five.com/api/public/) API is quite good, though some
-things were designed in a particular way that it's not that common for
-Rails-ready API. Those kinks have been addressed (in a way), and so far,
-there's direct support for:
-
-- `Group` via `FifteenFive::Group`
-- `Report` via `FifteenFive::Report`
-- `User` via `FifteenFive::User`
-
-Since they were built on top of the [Her gem](https://github.com/remiprev/her),
-a lot of ActiveResource-like functionality is freely available:
+This gem creates a Rails-friendly interface with the [15Five API](https://my.15five.com/api/public/)
+using the [Her gem](https://github.com/remiprev/her). Her provides a lot of 
+ActiveResource-like functionality out of the box:
 
 ```ruby
-FifteenFive::Models::User.all.to_a
-# => [#<FifteenFive::Models::User(user/954612/) ...>, ...]
+FifteenFive::User.all.to_a
+# => [#<FifteenFive::Models::User(user/6243/) ...>, ...]
 
-FifteenFive::Models::User.find(954612)
-# => #<FifteenFive::Models::User(user/954612/) ...>
+FifteenFive::User.find(6243)
+# => #<FifteenFive::Models::User(user/6243/) ...>
 ```
 
-No work has been done (yet) to handle associations due to how they relate
-information (through URLs).
+## Limitations
+
+- Not all of the available endoints have associated models yet.
+- No work has been done to handle associations (due to the URL format
+provided by the API).
+
+## Installation (Rails)
+
+Add the gem to your Gemfile:
+
+```ruby
+gem "fifteen_five", git: "https://github.com/ableco/fifteen_five.git", tag: "v0.1.0
+```
+
+Create an initializer, providing your API key:
+
+```ruby
+require "fifteen_five"
+FifteenFive.setup(ENV["FIFTEENFIVE_TOKEN"])
+```
