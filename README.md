@@ -9,13 +9,13 @@ using the [Her gem](https://github.com/remiprev/her).
 
 Her provides a lot of ActiveResource-like functionality out of the box:
 
-    ```ruby
-    FifteenFive::User.all.to_a
-    # => [#<FifteenFive::Models::User(user/6243/) ...>, ...]
+```ruby
+FifteenFive::User.all.to_a
+# => [#<FifteenFive::Models::User(user/6243/) ...>, ...]
 
-    FifteenFive::User.find(6243)
-    # => #<FifteenFive::Models::User(user/6243/) ...>
-    ```
+FifteenFive::User.find(6243)
+# => #<FifteenFive::Models::User(user/6243/) ...>
+```
 
 ## Limitations
 
@@ -29,7 +29,7 @@ Her provides a lot of ActiveResource-like functionality out of the box:
   their non-RESTful quality, those models don't _do_ anything yet.
 * Tests are non-existent.
 
-## Road to 1.0
+## Road to v1.0.0
 
 * [ ] Determine whether there's a better way to achieve associations via Her
       without the need for a monkey patch.
@@ -43,13 +43,13 @@ Her provides a lot of ActiveResource-like functionality out of the box:
 
 Add the gem to your Gemfile:
 
-    ```ruby
-    gem "fifteen_five", git: "https://github.com/ableco/fifteen_five.git", tag: "v0.2.0"
-    ```
+```ruby
+gem "fifteen_five", git: "https://github.com/ableco/fifteen_five.git", tag: "v0.2.0"
+```
 
 Create an initializer, providing your API key:
 
-    ```ruby
-    require "fifteen_five"
-    FifteenFive.setup(ENV["FIFTEENFIVE_TOKEN"])
-    ```
+```ruby
+require "fifteen_five"
+FifteenFive.setup(ENV["FIFTEENFIVE_TOKEN"])
+```
