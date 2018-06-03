@@ -1,2 +1,6 @@
 inherit_from:
   - https://raw.githubusercontent.com/ableco/ablecop/479e46fdd8e3f9b8181594f0c79c0b07d1ca32c9/config/.rubocop.yml
+
+AllCops:
+  Exclude:
+    - lib/fifteen_five/her/**/*

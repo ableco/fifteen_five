@@ -1,28 +1,26 @@
-require "her"
 require "fifteen_five/version"
 
-# Authentication
-require_relative "fifteen_five/authentication"
+require "her"
+# Patch the Her gem to account for non-RESTful associations in the 15Five API.
+require_relative "fifteen_five/her/association_patch"
 
-# API resource support
-require_relative "fifteen_five/response_parser"
+# API Support
+require_relative "fifteen_five/api_support/authentication"
+require_relative "fifteen_five/api_support/response_parser"
 
 module FifteenFive
-  # TODO: Resolve deprecation warning:
-  #   > WARNING: Unexpected middleware set after the adapter. This won't be
-  #   > supported from Faraday 1.0.
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def self.setup(token)
     Her::API.setup url: "https://my.15five.com/api/public/" do |c|
       # Request
-      c.use FifteenFive::Authentication, token
-      c.use Faraday::Request::UrlEncoded
+      c.use FifteenFive::ApiSupport::Authentication, token
 
       # Response
-      c.use FifteenFive::ResponseParser
+      c.use FifteenFive::ApiSupport::ResponseParser
 
       # Adapter
       c.use Faraday::Adapter::NetHttp
-      c.use Her::Middleware::AcceptJSON
     end
 
     # TODO: These really should be `require_relative` statements but, due to
@@ -41,8 +39,19 @@ module FifteenFive
     load File.join(File.dirname(__FILE__), "fifteen_five", "api_resource.rb")
     #
     # Named API resources
+    load File.join(File.dirname(__FILE__), "fifteen_five", "answer.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "bulk_user_import.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "department.rb")
     load File.join(File.dirname(__FILE__), "fifteen_five", "group.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "hello.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "high_five.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "objective.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "question.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "pulse.rb")
     load File.join(File.dirname(__FILE__), "fifteen_five", "report.rb")
+    load File.join(File.dirname(__FILE__), "fifteen_five", "security_audit.rb")
     load File.join(File.dirname(__FILE__), "fifteen_five", "user.rb")
   end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 end

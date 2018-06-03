@@ -1,6 +1,7 @@
 module FifteenFive
-  class Report < ApiResource
+  class Answer < ApiResource
     # Associations
+    belongs_to :question
     belongs_to :user
   end
 end
