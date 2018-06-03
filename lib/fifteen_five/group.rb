@@ -1,10 +1,6 @@
 module FifteenFive
   class Group < ApiResource
-    # Collect the user IDs out of the +members+ Array of URLs.
-    #
-    # Return Array of String user IDs.
-    def user_ids
-      @user_ids ||= extract_ids_from(members)
-    end
+    # Associations
+    has_many :members, class_name: "User"
   end
 end
