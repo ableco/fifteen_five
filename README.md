@@ -31,6 +31,8 @@ FifteenFive::User.find(6243)
 
 ## Road to v1.0.0
 
+* [ ] Clean up `FifteenFive::ApiSupport::ResponseParser` to remove one-off
+      hacks.
 * [ ] Determine whether there's a better way to achieve associations via Her
       without the need for a monkey patch.
 * [ ] Implement `BulkUserImport` and `Hello` models.
@@ -51,5 +53,6 @@ Create an initializer, providing your API key:
 
 ```ruby
 require "fifteen_five"
+FifteenFive.logger = Rails.logger
 FifteenFive.setup(ENV["FIFTEENFIVE_TOKEN"])
 ```

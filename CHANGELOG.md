@@ -1,5 +1,11 @@
 # FifteenFive Changelog
 
+## 0.2.1
+
+* Added `reviewer` to `Report`
+* Added `groups` to `User`
+* Added `FifteenFive.logger`
+
 ## 0.2.0
 
 * Added models for all list and read API resources

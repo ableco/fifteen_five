@@ -58,13 +58,22 @@ module FifteenFive
         end
       end
 
-      # TODO: Refactor to reduce branch complexity.
+      # TODO: Refactor to reduce branch complexity. This method should probably
+      # use a simple key map to massage the keys into something Her can
+      # understand.
       def convert_resource_urls_to_ids(data)
         data_with_converted_ids = {}
 
         data.each_pair do |key, value|
           if resource_url?(value)
-            key = "#{key}_id" unless key.match?("_id")
+            # TODO: Here are some hacks to catch for various inconsistencies
+            # in the 15Five API key names :(
+            # => Report#reviwer
+            if key == :reviewed_by
+              key = "reviewer_id"
+            else
+              key = "#{key}_id" unless key.match?("_id")
+            end
             data_with_converted_ids[key] = extract_id_from_resource_url(value)
           elsif value.is_a?(Array) && resource_url?(value.first)
             key = "#{key.to_s.singularize}_ids" unless key.match?("_ids")
@@ -72,11 +81,19 @@ module FifteenFive
               extract_id_from_resource_url(item)
             end
           else
-            # TODO: This is a one-off hack to catch for SecurityAudit
-            # `actor` associations. That is the one association resource
-            # that 15Five returns that is *not* in a resource URL format :(
-            key = key == :actor ? :actor_id : key
-            data_with_converted_ids[key] = value
+            # TODO: Here are some hacks to catch for various inconsistencies
+            # in the 15Five API key names :(
+            # => SecurityAudit#actor
+            # => Report#groups
+            key = case key
+                  when :actor
+                    "actor_id"
+                  when :company_groups_ids
+                    "group_ids"
+                  else
+                    key
+                  end
+            data_with_converted_ids[key.to_s] = value
           end
         end
 
