@@ -46,7 +46,7 @@ FifteenFive::User.find(6243)
 Add the gem to your Gemfile:
 
 ```ruby
-gem "fifteen_five", git: "https://github.com/ableco/fifteen_five.git", tag: "v0.2.0"
+gem "fifteen_five", git: "https://github.com/ableco/fifteen_five.git", tag: "v0.2.1"
 ```
 
 Create an initializer, providing your API key:
