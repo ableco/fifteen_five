@@ -12,6 +12,9 @@ module FifteenFive
         unless env.request_headers[KEY]
           env.request_headers[KEY] = "Bearer #{@token}"
         end
+
+        FifteenFive.logger.info("  FifteenFive Request => #{env.url}")
+
         @app.call(env)
       end
     end
