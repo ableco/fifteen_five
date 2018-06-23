@@ -29,10 +29,8 @@ Her provides a lot of ActiveResource-like functionality out of the box:
   their non-RESTful quality, those models don't _do_ anything yet.
 * Tests are non-existent.
 
-## Road to 1.0
+## Road to v1.0
 
-* [ ] Clean up `FifteenFive::ApiSupport::ResponseParser` to remove one-off
-      hacks.
 * [ ] Determine whether there's a better way to achieve associations via Her
       without the need for a monkey patch.
 * [ ] Implement `BulkUserImport` and `Hello` models.

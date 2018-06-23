@@ -1,0 +1,25 @@
+# Map of attribute names returned by the 15Five API to a format that Her
+# expects.
+#
+# The 15Five API is inconsistent in how it describes attributes and
+# associations.
+#
+# Examples:
+#   - Report `reviewed_by` instead of `reviewer` or `reviewer_id`
+#   - High Five has `creator_id` (Integer), Answer has `user` (which is a URL)
+#
+# Due to the inconsistency, we use this map to translate the API response
+# into key names that are consistent and friendly for interpretation by Her.
+#
+# Note: this map *does not* intend to capture every attribute key returned by
+# the API. Instead, it only includes the keys that need to be translated.
+actor: actor_id
+company_groups_ids: group_ids
+departments: department_ids
+group: group_id
+members: member_ids
+parent: parent_id
+question: question_id
+report: report_id
+reviewed_by: reviewer_id
+user: user_id
