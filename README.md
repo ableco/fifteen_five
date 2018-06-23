@@ -9,13 +9,13 @@ using the [Her gem](https://github.com/remiprev/her).
 
 Her provides a lot of ActiveResource-like functionality out of the box:
 
-    ```ruby
-    FifteenFive::User.all.to_a
-    # => [#<FifteenFive::Models::User(user/6243/) ...>, ...]
+```ruby
+FifteenFive::User.all.to_a
+# => [#<FifteenFive::Models::User(user/6243/) ...>, ...]
 
-    FifteenFive::User.find(6243)
-    # => #<FifteenFive::Models::User(user/6243/) ...>
-    ```
+FifteenFive::User.find(6243)
+# => #<FifteenFive::Models::User(user/6243/) ...>
+```
 
 ## Limitations
 
@@ -43,14 +43,14 @@ Her provides a lot of ActiveResource-like functionality out of the box:
 
 Add the gem to your Gemfile:
 
-    ```ruby
-    gem "fifteen_five", git: "https://github.com/ableco/fifteen_five.git", tag: "v0.2.0"
-    ```
+```ruby
+gem "fifteen_five", git: "https://github.com/ableco/fifteen_five.git", tag: "v0.2.1"
+```
 
 Create an initializer, providing your API key:
 
-    ```ruby
-    require "fifteen_five"
-    FifteenFive.logger = Rails.logger
-    FifteenFive.setup(ENV["FIFTEENFIVE_TOKEN"])
-    ```
+```ruby
+require "fifteen_five"
+FifteenFive.logger = Rails.logger
+FifteenFive.setup(ENV["FIFTEENFIVE_TOKEN"])
+```
