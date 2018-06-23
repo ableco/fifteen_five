@@ -1,16 +1,20 @@
+require "yaml"
 require_relative "errors"
 
 module FifteenFive
   module ApiSupport
     class ResponseParser < Faraday::Response::Middleware
+      API_BASE_URI = "https://my.15five.com/api/public/".freeze
+      ATTRIBUTE_KEY_MAP = YAML.load_file(File.join(__dir__, "attribute_map.yml")).freeze
+
       def on_complete(env)
         json = parse_json(env[:body])
 
         case env[:status]
         when 200
           env[:body] = on_success(json)
-        when 403, 404
-          on_error(env[:status], json)
+        else
+          on_error(env[:status])
         end
       end
 
@@ -39,69 +43,58 @@ module FifteenFive
         }
       end
 
-      def on_error(status_code, json)
+      def on_error(status_code)
         case status_code
         when 403
-          raise FifteenFive::ApiSupport::Errors::Unauthorized, json[:detail]
+          raise FifteenFive::ApiSupport::Errors::Unauthorized, "Unauthorized."
         when 404
           raise FifteenFive::ApiSupport::Errors::NotFound, "Not found."
         else
-          raise FifteenFive::ApiSupport::Errors::Unknown, "Unknown Error."
+          raise FifteenFive::ApiSupport::Errors::Unknown, "Unknown error."
         end
       end
 
-      def parse_data(data)
-        if data.is_a?(Array)
-          data.map { |object| convert_resource_urls_to_ids(object) }
-        elsif data.is_a?(Hash)
-          convert_resource_urls_to_ids(data)
+      def parse_data(unformatted_data)
+        if unformatted_data.is_a?(Array)
+          unformatted_data.map { |object| format_data(object) }
+        else
+          format_data(unformatted_data)
         end
       end
 
-      # TODO: Refactor to reduce branch complexity. This method should probably
-      # use a simple key map to massage the keys into something Her can
-      # understand.
-      def convert_resource_urls_to_ids(data)
-        data_with_converted_ids = {}
+      # Format unformatted API data into a format that's expected by Her.
+      #
+      # Attributes:
+      #   unformatted_data: Hash of data coming from the 15Five API.
+      #
+      # Return Hash of API data with keys and values that we expect.
+      def format_data(unformatted_data)
+        formatted_data = {}
 
-        data.each_pair do |key, value|
-          if resource_url?(value)
-            # TODO: Here are some hacks to catch for various inconsistencies
-            # in the 15Five API key names :(
-            # => Report#reviwer
-            if key == :reviewed_by
-              key = "reviewer_id"
-            else
-              key = "#{key}_id" unless key.match?("_id")
-            end
-            data_with_converted_ids[key] = extract_id_from_resource_url(value)
-          elsif value.is_a?(Array) && resource_url?(value.first)
-            key = "#{key.to_s.singularize}_ids" unless key.match?("_ids")
-            data_with_converted_ids[key] = value.map do |item|
-              extract_id_from_resource_url(item)
-            end
-          else
-            # TODO: Here are some hacks to catch for various inconsistencies
-            # in the 15Five API key names :(
-            # => SecurityAudit#actor
-            # => Report#groups
-            key = case key
-                  when :actor
-                    "actor_id"
-                  when :company_groups_ids
-                    "group_ids"
-                  else
-                    key
-                  end
-            data_with_converted_ids[key.to_s] = value
-          end
+        unformatted_data.each_pair do |unformatted_key, unformatted_value|
+          formatted_key = format_key(unformatted_key)
+          formatted_data[formatted_key] = format_value(unformatted_value)
         end
 
-        data_with_converted_ids
+        formatted_data
       end
 
-      def resource_url?(value)
-        value.is_a?(String) && value.match?("https://my.15five.com/api/public/")
+      def format_key(unformatted_key)
+        ATTRIBUTE_KEY_MAP[unformatted_key.to_s] || unformatted_key.to_s
+      end
+
+      def format_value(unformatted_value)
+        if resource_url?(unformatted_value)
+          extract_id_from_resource_url(unformatted_value)
+        elsif unformatted_value.is_a?(Array) && resource_url?(unformatted_value.first)
+          unformatted_value.map { |item| extract_id_from_resource_url(item) }
+        else
+          unformatted_value
+        end
+      end
+
+      def resource_url?(unformatted_value)
+        unformatted_value.is_a?(String) && unformatted_value.match?(API_BASE_URI)
       end
 
       # Convert FifteenFive associations references from URLs to IDs.
